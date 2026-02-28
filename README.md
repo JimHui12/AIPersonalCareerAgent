@@ -1,73 +1,94 @@
-# React + TypeScript + Vite
+# NextRole — AI Personal Career Agent
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **Your AI-powered career co-pilot.** Strategize, optimize, and land your next role with the power of coordinated AI agents.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Overview
 
-## React Compiler
+**NextRole** is a comprehensive hub for job seekers, designed to automate the most tedious parts of the job search. From resume tailoring to interview preparation, NextRole uses a sophisticated **AI Orchestration Layer** to provide personalized, high-quality career guidance.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Why NextRole?
+Most tools offer static templates. NextRole offers a **Dynamic Mission Flow** where multiple specialized AI agents (Architect, Developer, Auditor) collaborate to ensure your profile is not just "good," but "hire-ready."
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ✨ Key Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 📄 AI Resume Builder & Analyzer
+- **Smart Analysis**: Get an "Optimization Score" and actionable feedback on your current resume.
+- **Auto-Tailoring**: Leverages matching algorithms to highlight the skills recruiters are looking for (in development).
+- **Modern UI**: A clean, sidebar-driven editor for real-time updates.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🤖 AI Orchestration (The "Career Mission")
+- **The Architect**: Plans your career strategy and identifies high-level goals.
+- **The Developer**: Conducts skills gap analysis and creates a roadmap for your growth.
+- **The Auditor**: Performs a final quality review and ensures you're ready for the spotlight.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 🎯 Job Matcher & Tracker
+- **Role Matching**: See exactly how well you fit a specific job description based on your current skills.
+- **Kanban Pipeline**: Track your applications from "Saved" to "Offer" (Phase 2).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🎤 Mock Interview Prep (Coming Soon)
+- **AI-Driven Q&A**: Practice with role-specific technical and behavioral questions.
+- **Instant Feedback**: Get scored on your responses and learn how to improve.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | React (Vite), TypeScript |
+| **Styling** | Tailwind CSS |
+| **UI Components** | shadcn/ui, Magic UI |
+| **State / Data** | TanStack Query (planned), AuthContext |
+| **Backend / Auth** | Supabase |
+| **AI Layer** | OpenAI (Mission-driven orchestration) |
+
+---
+
+## 🏁 Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18+)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/JimHui12/AIPersonalCareerAgent.git
+   cd AIPersonalCareerAgent
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables:**
+   Create a `.env.local` file in the root directory:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🗺️ Roadmap
+
+- [x] **Phase 1**: Authentication & Core Layout
+- [x] **Phase 2**: Resume Builder & AI Analyzer
+- [ ] **Phase 3**: Real-world Job Tracking & Kanban View
+- [ ] **Phase 4**: Full Integration with OpenAI for dynamic career missions
+- [ ] **Phase 5**: AI Video/Audio Mock Interviews
+
+---
+
+
