@@ -1,0 +1,3 @@
+src/features/resume/components/ResumeAnalyzer.tsx(1,24): error TS2307: Cannot find module '@/components/ui/Button' or its corresponding type declarations.
+src/features/resume/components/ResumeBuilder.tsx(2,24): error TS2307: Cannot find module '@/components/ui/Button' or its corresponding type declarations.
+src/features/resume/hooks/useResume.ts(2,44): error TS2307: Cannot find module '@/types/resume' or its corresponding type declarations.

@@ -1,0 +1,21 @@
+# NextRole AI Career Agent Implementation Outline
+
+- [x] Base Setup (Supabase Client & Config)
+- [x] Base Scalable Structure (Folders & Tailwind layout)
+- [x] Authentication Setup (Magic Link Login, Global App state)
+- [x] Layout Enhancement (AI Career Agent Architecture)
+  - [x] Implement persistent global [Navbar](file:///d:/projects/first-app/src/components/ui/Navbar.tsx#9-52) (brand: "NextRole")
+  - [x] Implement [Sidebar](file:///d:/projects/first-app/src/components/ui/Sidebar.tsx#15-64) component with AI Career links ([src/components/ui/Sidebar.tsx](file:///d:/projects/first-app/src/components/ui/Sidebar.tsx))
+  - [x] Update [RootLayout.tsx](file:///d:/projects/first-app/src/layouts/RootLayout.tsx) to handle the two-pane authenticated layout
+- [x] Scalable Design System
+  - [x] Configure TypeScript and Vite path aliases (`@/`)
+  - [x] Initialize `shadcn/ui` and global CSS variables
+  - [x] Refactor existing [Button](file:///d:/projects/first-app/src/components/ui/Button.tsx#37-42) and `Input` to use the new system
+- [/] Scaffold MVP Application Pages
+  - [/] Setup `react-router-dom` and define application routes (`src/router/index.tsx`)
+  - [ ] [Dashboard](file:///d:/projects/first-app/src/features/dashboard/components/Dashboard.tsx#9-32) (route mapping + basic scaffold)
+  - [ ] `Resume Builder & Analyzer` (`features/resume`)
+  - [ ] `Job Tracker` (`features/jobs`)
+  - [ ] `AI Interview Prep` (`features/interview`)
+- [ ] Database Setup (Future)
+  - [x] DB Schema Planning (`profiles`, `resumes`, `jobs`, `interview_sessions`)
