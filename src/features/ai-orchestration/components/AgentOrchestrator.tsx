@@ -1,19 +1,11 @@
-import { useState } from 'react'
-import { orchestratorService } from '@/services/orchestrator.service'
+import { useOrchestrator } from '../hooks/useOrchestrator'
 import { Button } from '@/components/ui/Button'
-import type { AgentResult } from '@/types/agents'
 
 export function AgentOrchestrator() {
-    const [results, setResults] = useState<AgentResult[]>([])
-    const [loading, setLoading] = useState(false)
-    const [mission, setMission] = useState('')
+    const { results, loading, mission, setMission, runMission } = useOrchestrator()
 
     const handleRunMission = async () => {
-        if (!mission) return
-        setLoading(true)
-        const agentResults = await orchestratorService.runCareerMission(mission)
-        setResults(agentResults)
-        setLoading(false)
+        await runMission()
     }
 
     return (

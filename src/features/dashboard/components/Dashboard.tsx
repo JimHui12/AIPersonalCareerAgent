@@ -1,6 +1,6 @@
 import { authService } from '../../../services/auth.service'
 import { Button } from '../../../components/ui/Button'
-import { useAuth } from '../../auth/context/auth.context'
+import { useAuth } from '../../auth/hooks/useAuth'
 import { RoleMatcher } from '../../ai-orchestration/components/RoleMatcher'
 import { AgentOrchestrator } from '../../ai-orchestration/components/AgentOrchestrator'
 

@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { RootLayout } from './layouts/RootLayout'
-import { AuthProvider, useAuth } from './features/auth/context/auth.context'
+import { AuthProvider } from './features/auth/context/AuthProvider'
+import { useAuth } from './features/auth/hooks/useAuth'
 
 function AppContent() {
   const { session, loading } = useAuth()

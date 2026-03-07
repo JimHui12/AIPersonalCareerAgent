@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useAuth } from '../features/auth/context/auth.context'
+import { useAuth } from '../features/auth/hooks/useAuth'
 
 /**
  * AuthGuard: Only allows authenticated users to access the children routes.

@@ -1,30 +1,8 @@
-import { useState } from 'react'
-import { matchingService } from '@/services/matching.service'
-import type { JobMatch } from '@/types/agents'
+import { useRoleMatch } from '../hooks/useRoleMatch'
 import { Button } from '@/components/ui/Button'
-import { useAuth } from '@/features/auth/context/auth.context'
 
 export function RoleMatcher() {
-    const { session: _session } = useAuth()
-    const [matches, setMatches] = useState<JobMatch[]>([])
-    const [loading, setLoading] = useState(false)
-
-    const findMatches = async () => {
-        setLoading(true)
-        // In a real app, this would fetch jobs from Supabase
-        const mockJobs = [
-            { id: '1', role_title: 'Software Engineer', company_name: 'Tech Corp' },
-            { id: '2', role_title: 'Product Manager', company_name: 'Innovation Inc' }
-        ]
-
-        // Mock profile and resume
-        const userProfile = { career_goal: 'Senior Developer' }
-        const resumeContent = { skills: ['React', 'TypeScript', 'Node.js'] }
-
-        const results = await matchingService.findMatches(userProfile, resumeContent, mockJobs)
-        setMatches(results)
-        setLoading(false)
-    }
+    const { matches, loading, findMatches } = useRoleMatch()
 
     return (
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">

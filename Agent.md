@@ -1,4 +1,5 @@
 # AGENTS.md - Role-Based Development Rules
+@docs/ARCHITECTURE.md
 
 https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md
 
@@ -26,6 +27,29 @@ https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure
   - **Performance:** Look for missing `useMemo`/`useCallback` in heavy render loops.
   - **Standardization:** Ensure all new components include Vitest unit tests.
 - **Action:** If issues are found, the Auditor must provide a specific list of "Required Fixes" to the Developer.
+
+## 🗄️ Supabase Standards
+**Goal:** Consistent database schema and secure data access.
+
+### 📐 Table Structures (Planned)
+| Table | Key Columns | RLS Policy |
+| :--- | :--- | :--- |
+| `profiles` | `id` (PK, uuid), `first_name`, `last_name`, `career_goal` | `auth.uid() = id` |
+| `resumes` | `id` (PK), `user_id` (FK), `title`, `content` (jsonb/text) | `auth.uid() = user_id` |
+| `jobs` | `id` (PK), `user_id` (FK), `company_name`, `status` | `auth.uid() = user_id` |
+| `interview_sessions` | `id` (PK), `user_id` (FK), `job_id` (FK), `chat_history` | `auth.uid() = user_id` |
+
+### 🔒 Row Level Security (RLS)
+- **Default:** Enable RLS on all new tables.
+- **Tenant Isolation:** All tables (except public lookups) must have a `user_id` column linked to `auth.users`.
+- **Policy Pattern:** `CREATE POLICY "Users can only access their own [data]" ON [table] FOR ALL USING (auth.uid() = user_id);`
+
+### ⚡ Edge Function Patterns
+- **Location:** `supabase/functions/[function-name]/index.ts`
+- **Use Cases:** External API integrations (OpenAI), scraping, long-running background tasks.
+- **Security:** Always validate the `Authorization` header and use service role keys only when necessary.
+- **Deno:** Use Deno standard library and Supabase-maintained modules.
+
 
 ## 🚀 Environment Commands
 - **Install:** `npm install`

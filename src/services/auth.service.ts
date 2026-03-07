@@ -1,3 +1,4 @@
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 
 /**
@@ -30,7 +31,7 @@ export const authService = {
     },
 
     // Listen to Auth stage changes
-    onAuthStateChange: (callback: (event: string, session: any) => void) => {
+    onAuthStateChange: (callback: (event: AuthChangeEvent, session: Session | null) => void) => {
         const { data } = supabase.auth.onAuthStateChange(callback)
         return data.subscription
     }

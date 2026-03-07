@@ -3,7 +3,11 @@ import App from '../App'
 import Auth from '../features/auth/components/Auth'
 import Dashboard from '../features/dashboard/components/Dashboard'
 import { ResumeBuilder } from '../features/resume'
+import JobTracker from '../features/jobs/components/JobTracker'
+import { InterviewPrep } from '../features/interview/components/InterviewPrep'
 import { AuthGuard, GuestGuard } from './AuthGuard'
+
+import Settings from '../features/settings/components/Settings'
 
 /**
  * Public routes accessible only to guests (unauthenticated users).
@@ -31,11 +35,15 @@ const protectedRoutes: RouteObject[] = [
     },
     {
         path: 'jobs',
-        element: <div className="p-8 text-center text-gray-500">Job Tracker (Coming Soon)</div>
+        element: <JobTracker />
     },
     {
         path: 'interview',
-        element: <div className="p-8 text-center text-gray-500">AI Interview Prep (Coming Soon)</div>
+        element: <InterviewPrep />
+    },
+    {
+        path: 'settings',
+        element: <Settings />
     }
 ]
 

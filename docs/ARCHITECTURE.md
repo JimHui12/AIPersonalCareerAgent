@@ -133,7 +133,7 @@ Defined in `src/router/index.tsx` using `react-router-dom`.
 | `src/services/matching.service.ts` | ✅ | `MatchingService` — role/skill matching logic |
 | `components/AgentOrchestrator.tsx` | ✅ | UI component for triggering and displaying a career mission |
 | `components/RoleMatcher.tsx` | ✅ | UI component for displaying job match results |
-| `hooks/` | ❌ | Not yet created — `useOrchestrator`, `useRoleMatch` hooks planned |
+| `hooks/` | ✅ | `useOrchestrator`, `useRoleMatch` hooks created |
 | LLM API integration | ❌ | `BaseAgent.execute()` is a simulation stub — real OpenAI calls not yet wired |
 
 ### Agent Roles
@@ -226,9 +226,9 @@ runCareerMission(description)
 ### Phase 2 — Page Scaffolding 🔄
 - [x] Routes defined for `/resume`, `/jobs`, `/interview` (placeholders)
 - [x] `Resume Builder & Analyzer` — full component (`features/resume/`)
-- [ ] `Job Tracker` — Kanban/list view (`features/jobs/`)
-- [ ] `AI Interview Prep` — mock interview chat (`features/interview/`)
-- [ ] `Settings` page (`/settings`)
+- [x] `Job Tracker` — Kanban/list view (`features/jobs/`)
+- [x] `AI Interview Prep` — mock interview chat (`features/interview/`)
+- [x] `Settings` page (`/settings`)
 
 ### Phase 3 — AI Orchestration 🔄
 - [x] `BaseAgent` + 3 concrete agents
