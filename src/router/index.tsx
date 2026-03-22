@@ -1,13 +1,23 @@
+import { lazy, Suspense, type ReactElement, type ReactNode } from 'react'
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom'
 import App from '../App'
-import Auth from '../features/auth/components/Auth'
-import Dashboard from '../features/dashboard/components/Dashboard'
-import { ResumeBuilder } from '../features/resume'
-import JobTracker from '../features/jobs/components/JobTracker'
-import { InterviewPrep } from '../features/interview/components/InterviewPrep'
 import { AuthGuard, GuestGuard } from './AuthGuard'
+import { RouteFallback } from './routeFallback'
 
-import Settings from '../features/settings/components/Settings'
+const Auth = lazy(() => import('../features/auth/components/Auth'))
+const Dashboard = lazy(() => import('../features/dashboard/components/Dashboard'))
+const ResumeBuilder = lazy(() =>
+    import('../features/resume/components/ResumeBuilder').then((m) => ({ default: m.ResumeBuilder }))
+)
+const JobTracker = lazy(() => import('../features/jobs/components/JobTracker'))
+const InterviewPrep = lazy(() =>
+    import('../features/interview/components/InterviewPrep').then((m) => ({ default: m.InterviewPrep }))
+)
+const Settings = lazy(() => import('../features/settings/components/Settings'))
+
+function suspensePage(page: ReactNode): ReactElement {
+    return <Suspense fallback={<RouteFallback />}>{page}</Suspense>
+}
 
 /**
  * Public routes accessible only to guests (unauthenticated users).
@@ -16,7 +26,7 @@ import Settings from '../features/settings/components/Settings'
 const publicRoutes: RouteObject[] = [
     {
         path: 'auth',
-        element: <Auth />
+        element: suspensePage(<Auth />)
     }
 ]
 
@@ -27,23 +37,23 @@ const publicRoutes: RouteObject[] = [
 const protectedRoutes: RouteObject[] = [
     {
         path: 'dashboard',
-        element: <Dashboard />
+        element: suspensePage(<Dashboard />)
     },
     {
         path: 'resume',
-        element: <ResumeBuilder />
+        element: suspensePage(<ResumeBuilder />)
     },
     {
         path: 'jobs',
-        element: <JobTracker />
+        element: suspensePage(<JobTracker />)
     },
     {
         path: 'interview',
-        element: <InterviewPrep />
+        element: suspensePage(<InterviewPrep />)
     },
     {
         path: 'settings',
-        element: <Settings />
+        element: suspensePage(<Settings />)
     }
 ]
 

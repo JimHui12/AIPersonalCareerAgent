@@ -29,14 +29,7 @@ const MOCK_RESUME_CONTENT: ResumeContent = {
 };
 
 export function useResume() {
-    const [resume, setResume] = useState<Resume | null>({
-        id: '1',
-        userId: 'user-123',
-        title: 'Main Resume',
-        content: MOCK_RESUME_CONTENT,
-        isBaseResume: true,
-        createdAt: new Date().toISOString()
-    });
+    const [resume, setResume] = useState<Resume | null>(null);
     const [loading, setLoading] = useState(false);
 
     const updateResume = useCallback((content: Partial<ResumeContent>) => {
@@ -51,9 +44,17 @@ export function useResume() {
 
     const uploadResume = useCallback(async (file: File) => {
         setLoading(true);
-        // Simulation of file processing
+        // Simulation of file processing — replace with Supabase Storage + parse when Phase 4 lands
         console.log('Uploading file:', file.name);
         await new Promise(resolve => setTimeout(resolve, 2000));
+        setResume({
+            id: crypto.randomUUID(),
+            userId: 'user-123',
+            title: file.name.replace(/\.[^/.]+$/, '') || 'Main Resume',
+            content: MOCK_RESUME_CONTENT,
+            isBaseResume: true,
+            createdAt: new Date().toISOString()
+        });
         setLoading(false);
     }, []);
 

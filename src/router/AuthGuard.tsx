@@ -1,5 +1,13 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { Navigate, Outlet, useLocation, type Location } from 'react-router-dom'
 import { useAuth } from '../features/auth/hooks/useAuth'
+
+/** Only allow in-app return paths (defensive: ignore odd `location.state`). */
+function safeReturnPath(from: Location | undefined): string {
+    if (!from?.pathname) return '/dashboard'
+    const p = from.pathname
+    if (!p.startsWith('/') || p.startsWith('//')) return '/dashboard'
+    return p
+}
 
 /**
  * AuthGuard: Only allows authenticated users to access the children routes.
@@ -30,13 +38,16 @@ export function AuthGuard() {
  */
 export function GuestGuard() {
     const { session, loading } = useAuth()
+    const location = useLocation()
 
     if (loading) {
         return <div className="p-8 text-center text-gray-400">Loading Session...</div>
     }
 
     if (session) {
-        return <Navigate to="/dashboard" replace />
+        const state = location.state as { from?: Location } | null | undefined
+        const to = safeReturnPath(state?.from)
+        return <Navigate to={to} replace />
     }
 
     return <Outlet />

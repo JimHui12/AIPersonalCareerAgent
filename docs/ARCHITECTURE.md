@@ -56,7 +56,7 @@ src/
 │   └── matching.service.ts        # Role/skill matching logic
 ├── https/
 │   ├── api.ts                     # GET / POST / DELETE helpers
-│   └── axios.ts                   # Axios instance
+│   └── axiosRequestsInterceptor.ts # Axios instance (optional `VITE_API_BASE_URL`)
 ├── lib/                           # shadcn/ui utilities
 ├── hooks/                         # (empty — future shared hooks)
 ├── stores/                        # (empty — deferred to Phase 3, see State Management)
@@ -106,7 +106,7 @@ Defined in `src/router/index.tsx` using `react-router-dom`.
 | Route | Guard | Component | Status |
 | :--- | :--- | :--- | :--- |
 | `/` | — | Redirects → `/dashboard` | ✅ |
-| `/auth` | `GuestGuard` | `Auth.tsx` | ✅ |
+| `/auth` | `GuestGuard` | `Auth.tsx` | ✅ (after login → saved `from` route or `/dashboard`) |
 | `/dashboard` | `AuthGuard` | `Dashboard.tsx` | ✅ |
 | `/resume` | `AuthGuard` | `ResumeBuilder.tsx` | ✅ |
 | `/jobs` | `AuthGuard` | Placeholder (`Coming Soon`) | 🔄 |
@@ -116,7 +116,7 @@ Defined in `src/router/index.tsx` using `react-router-dom`.
 ### Guards (`src/router/AuthGuard.tsx`)
 
 - **`AuthGuard`** — Unauthenticated users are redirected to `/auth`, preserving the intended destination in `location.state.from`.
-- **`GuestGuard`** — Authenticated users are redirected to `/dashboard` (prevents visiting `/auth` when logged in).
+- **`GuestGuard`** — Authenticated users are redirected to the route saved in `location.state.from` (when arriving from `AuthGuard`), otherwise `/dashboard` (prevents visiting `/auth` when logged in).
 - Both guards render a loading state while the session check is in-flight.
 
 ---
@@ -235,7 +235,7 @@ runCareerMission(description)
 - [x] `OrchestratorService` state machine
 - [x] `MatchingService` for role/skill matching
 - [x] `AgentOrchestrator.tsx` and `RoleMatcher.tsx` UI components
-- [ ] `hooks/useOrchestrator` and `hooks/useRoleMatch`
+- [x] `hooks/useOrchestrator` and `hooks/useRoleMatch`
 - [ ] Wire real OpenAI/LLM API calls into `BaseAgent.execute()`
 
 ### Phase 4 — Data Layer
@@ -252,7 +252,7 @@ runCareerMission(description)
 - [ ] `npm run build` completes without TypeScript errors
 - [ ] **Auth**: Sign Up and Sign In work end-to-end
 - [ ] **`AuthGuard`**: All protected routes redirect unauthenticated users to `/auth`
-- [ ] **`GuestGuard`**: Authenticated users visiting `/auth` are redirected to `/dashboard`
+- [ ] **`GuestGuard`**: Authenticated users visiting `/auth` are redirected to `/dashboard` or to the route stored in `location.state.from` when present
 - [ ] **Session preservation**: After login, user is returned to the originally requested route
 - [ ] **Navigation**: Sidebar appears only when logged in and links to all feature pages
 - [ ] **Responsive**: Sidebar/Navbar layout works on desktop and mobile

@@ -1,0 +1,60 @@
+"Always follow the coding standards and rules defined in the .agent/rules/ and .antigravity/ directories."
+
+# AGENTS.md - Role-Based Development Rules
+@docs/ARCHITECTURE.md
+
+https://github.com/alan2207/bulletproof-react/blob/master/docs/project-structure.md
+
+## 🏛️ Architect Role
+**Goal:** High-level planning and system design.
+- **Directives:** 
+  - Before any code is written, create a `PROPOSED_CHANGES.md` or update the `SPEC.md`.
+  - Enforce "Atomic Design" for React components in `src/components/`.
+  - Maintain a strict "no-circular-dependencies" policy.
+- **Boundaries:** Do not write implementation code; only define interfaces, folder structures, and state logic.
+
+## 🛠️ Developer Role
+**Goal:** Implementation and feature development.
+- **Directives:**
+  - Follow the plan provided by the Architect.
+  - Use TypeScript for all files; strictly avoid `any`.
+  - Use Tailwind CSS for styling; use TanStack Query for server/async data when it is added to the project.
+  - Run `npm run lint` after every major file change; run tests when a test script exists.
+- **Style:** Prefer functional components and hooks over class components.
+
+## ⚖️ Auditor Role
+**Goal:** Security, performance, and code quality review.
+- **Checklist:**
+  - **Security:** Check for exposed API keys or unsafe `dangerouslySetInnerHTML`.
+  - **Performance:** Look for missing `useMemo`/`useCallback` in heavy render loops.
+  - **Standardization:** When Vitest (or another test runner) is configured, ensure critical new logic includes tests.
+- **Action:** If issues are found, the Auditor must provide a specific list of "Required Fixes" to the Developer.
+
+## 🗄️ Supabase Standards
+**Goal:** Consistent database schema and secure data access.
+
+### 📐 Table Structures (Planned)
+| Table | Key Columns | RLS Policy |
+| :--- | :--- | :--- |
+| `profiles` | `id` (PK, uuid), `first_name`, `last_name`, `career_goal` | `auth.uid() = id` |
+| `resumes` | `id` (PK), `user_id` (FK), `title`, `content` (jsonb/text) | `auth.uid() = user_id` |
+| `jobs` | `id` (PK), `user_id` (FK), `company_name`, `status` | `auth.uid() = user_id` |
+| `interview_sessions` | `id` (PK), `user_id` (FK), `job_id` (FK), `chat_history` | `auth.uid() = user_id` |
+
+### 🔒 Row Level Security (RLS)
+- **Default:** Enable RLS on all new tables.
+- **Tenant Isolation:** All tables (except public lookups) must have a `user_id` column linked to `auth.users`.
+- **Policy Pattern:** `CREATE POLICY "Users can only access their own [data]" ON [table] FOR ALL USING (auth.uid() = user_id);`
+
+### ⚡ Edge Function Patterns
+- **Location:** `supabase/functions/[function-name]/index.ts`
+- **Use Cases:** External API integrations (OpenAI), scraping, long-running background tasks.
+- **Security:** Always validate the `Authorization` header and use service role keys only when necessary.
+- **Deno:** Use Deno standard library and Supabase-maintained modules.
+
+
+## 🚀 Environment Commands
+- **Install:** `npm install`
+- **Build:** `npm run build`
+- **Test:** (add a `test` script when Vitest/Jest is configured)
+- **Lint:** `npm run lint -- --fix`

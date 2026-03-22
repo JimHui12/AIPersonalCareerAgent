@@ -67,11 +67,15 @@ Most tools offer static templates. NextRole offers a **Dynamic Mission Flow** wh
    npm install
    ```
 
-3. **Configure Environment Variables:**
-   Create a `.env.local` file in the root directory:
+3. **Configure environment variables:**
+   Create a `.env.local` file in the project root (required for auth):
    ```env
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+   Optional — custom API base URL for `src/https/` Axios calls:
+   ```env
+   VITE_API_BASE_URL=https://your-api.example.com
    ```
 
 4. **Start the development server:**
@@ -83,11 +87,13 @@ Most tools offer static templates. NextRole offers a **Dynamic Mission Flow** wh
 
 ## 🗺️ Roadmap
 
-- [x] **Phase 1**: Authentication & Core Layout
-- [x] **Phase 2**: Resume Builder & AI Analyzer
-- [ ] **Phase 3**: Real-world Job Tracking & Kanban View
-- [ ] **Phase 4**: Full Integration with OpenAI for dynamic career missions
-- [ ] **Phase 5**: AI Video/Audio Mock Interviews
+See `docs/ARCHITECTURE.md` for the full phased plan. In short:
+
+- [x] **Phase 1**: Authentication & core layout
+- [x] **Phase 2**: Page scaffolding (resume, jobs, interview, settings)
+- [ ] **Phase 3**: Wire real LLM calls into the orchestration layer
+- [ ] **Phase 4**: Supabase data layer (profiles, resumes, jobs, interviews)
+- [ ] **Phase 5**: Advanced interview / media features (as needed)
 
 ---
 

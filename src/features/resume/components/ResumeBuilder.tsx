@@ -1,5 +1,7 @@
 import { useResume } from '../hooks/useResume.ts'
 import { Button } from '@/components/ui/Button'
+import { buttonVariants } from '@/components/ui/button-variants'
+import { cn } from '@/lib/utils'
 import { ResumeAnalyzer } from './ResumeAnalyzer.tsx'
 
 export function ResumeBuilder() {
@@ -13,7 +15,30 @@ export function ResumeBuilder() {
     }
 
     if (!resume) {
-        return <div className="p-8 text-center text-gray-500">No resume found. Please upload one.</div>
+        return (
+            <div className="max-w-lg mx-auto p-8 space-y-6 text-center">
+                <div>
+                    <h2 className="text-2xl font-bold text-gray-900">No resume yet</h2>
+                    <p className="text-sm text-gray-500 mt-2">Upload a PDF or Word document to get started.</p>
+                </div>
+                <div>
+                    <input
+                        type="file"
+                        id="resume-upload-empty"
+                        className="hidden"
+                        onChange={handleFileUpload}
+                        accept=".pdf,.doc,.docx"
+                        disabled={loading}
+                    />
+                    <label
+                        htmlFor="resume-upload-empty"
+                        className={cn(buttonVariants(), loading && 'pointer-events-none opacity-50', 'cursor-pointer')}
+                    >
+                        {loading ? 'Uploading...' : 'Upload resume'}
+                    </label>
+                </div>
+            </div>
+        )
     }
 
     return (

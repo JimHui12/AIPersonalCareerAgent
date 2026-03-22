@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
-import type { Session } from '@supabase/supabase-js'
+import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
 import { authService } from '../../../services/auth.service'
 import { AuthContext } from './AuthContext'
 
@@ -15,7 +15,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         })
 
         // Subscribe to auth state changes
-        const subscription = authService.onAuthStateChange((_event: string, session: Session | null) => {
+        const subscription = authService.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
             setSession(session)
             setLoading(false)
         })
