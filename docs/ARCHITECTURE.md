@@ -52,17 +52,19 @@ src/
 │   └── AuthGuard.tsx              # ✅ AuthGuard + GuestGuard
 ├── services/                      # ✅ All services live here
 │   ├── auth.service.ts            # Supabase auth abstraction
+│   ├── profile.service.ts         # profiles table CRUD (RLS)
 │   ├── orchestrator.service.ts    # AI Mission state machine
 │   └── matching.service.ts        # Role/skill matching logic
 ├── https/
 │   ├── api.ts                     # GET / POST / DELETE helpers
 │   └── axiosRequestsInterceptor.ts # Axios instance (optional `VITE_API_BASE_URL`)
-├── lib/                           # shadcn/ui utilities
+├── lib/                           # shadcn/ui utilities, queryClient (TanStack Query)
 ├── hooks/                         # (empty — future shared hooks)
-├── stores/                        # (empty — deferred to Phase 3, see State Management)
+├── stores/                        # (empty — optional; see Phase 4–5 in Implementation Roadmap)
 ├── types/                         # ✅ All shared types live here
 │   ├── agents.ts                  # AgentRole, AgentTask, AgentResult, OrchestratorState, JobMatch
 │   ├── auth.ts                    # AuthContextType
+│   ├── profile.ts                 # Profile, ProfileRow
 │   ├── layout.ts                  # RootLayoutProps, NavbarProps
 │   ├── resume.ts                  # Resume, ResumeContent, Experience, Education, ResumeAnalysis
 │   └── components.ts              # ButtonProps (barrel re-export from Button.tsx)
@@ -90,12 +92,12 @@ src/
 
 ## State Management
 
-**Current**: Auth session is the only shared state, handled by `AuthContext` + `useAuth`. No global store is installed.
+**Current**: Auth session is handled by `AuthContext` + `useAuth`. **TanStack Query** (`QueryClientProvider` in `main.tsx`) backs server-backed data starting with **`profiles`** on the Settings page (`useProfile`).
 
-**Decision**: Zustand will be added in **Phase 3** when Supabase data is fetched and needs to be shared across pages. For now, local `useState` + context is sufficient.
+**Decision**: No global client store yet. Use **TanStack Query** for Supabase-backed entities (profiles, resumes, jobs, …). Optional **Zustand** only if truly client-only shared UI state is needed across many routes.
 
 > [!NOTE]
-> TanStack Query will also be evaluated in Phase 3 as an alternative to a client-side store for server data (caching, re-fetching, loading/error states).
+> Auth stays in `AuthContext` unless you later consolidate session via Query patterns.
 
 ---
 
@@ -109,8 +111,9 @@ Defined in `src/router/index.tsx` using `react-router-dom`.
 | `/auth` | `GuestGuard` | `Auth.tsx` | ✅ (after login → saved `from` route or `/dashboard`) |
 | `/dashboard` | `AuthGuard` | `Dashboard.tsx` | ✅ |
 | `/resume` | `AuthGuard` | `ResumeBuilder.tsx` | ✅ |
-| `/jobs` | `AuthGuard` | Placeholder (`Coming Soon`) | 🔄 |
-| `/interview` | `AuthGuard` | Placeholder (`Coming Soon`) | 🔄 |
+| `/jobs` | `AuthGuard` | `JobTracker.tsx` | ✅ (mock data; wire to DB in Phase 4) |
+| `/interview` | `AuthGuard` | `InterviewPrep.tsx` | ✅ (mock chat; wire to LLM + DB later) |
+| `/settings` | `AuthGuard` | `Settings.tsx` | ✅ |
 | `*` | — | Redirects → `/dashboard` | ✅ |
 
 ### Guards (`src/router/AuthGuard.tsx`)
@@ -214,35 +217,67 @@ runCareerMission(description)
 
 ## Implementation Roadmap
 
-### Phase 1 — Authentication & Layout ✅
-- [x] Supabase client and Email/Password auth
+High-level order: **auth & shell → feature UI → LLM integration → persisted data → polish & scale**. Checkboxes track concrete deliverables.
+
+### Phase 1 — Authentication & layout ✅
+- [x] Supabase client and email/password auth
 - [x] Global `Navbar` and conditional `Sidebar`
-- [x] `RootLayout` 2-column layout
-- [x] TypeScript/Vite path aliases (`@/`) and `shadcn/ui` design system
-- [x] `AuthGuard` / `GuestGuard` — route protection with session preservation
-- [x] All `type`/`interface` declarations consolidated into `src/types/`
-- [x] All service logic consolidated into `src/services/`
+- [x] `RootLayout` two-column layout
+- [x] TypeScript/Vite path aliases (`@/`) and shadcn-style UI primitives
+- [x] `AuthGuard` / `GuestGuard` with post-login return to `location.state.from`
+- [x] Shared types under `src/types/`, services under `src/services/`
+- [x] Lazy-loaded routes + `Suspense` fallbacks (`src/router/`)
 
-### Phase 2 — Page Scaffolding 🔄
-- [x] Routes defined for `/resume`, `/jobs`, `/interview` (placeholders)
-- [x] `Resume Builder & Analyzer` — full component (`features/resume/`)
-- [x] `Job Tracker` — Kanban/list view (`features/jobs/`)
-- [x] `AI Interview Prep` — mock interview chat (`features/interview/`)
-- [x] `Settings` page (`/settings`)
+### Phase 2 — Page scaffolding ✅
+- [x] Routes: `/resume`, `/jobs`, `/interview`, `/settings`
+- [x] Resume builder & analyzer UI (`features/resume/`) — upload flow uses mock parsing until Phase 4
+- [x] Job tracker UI (`features/jobs/`) — mock Kanban/list data
+- [x] Interview prep UI (`features/interview/`) — mock chat
+- [x] Settings page
 
-### Phase 3 — AI Orchestration 🔄
-- [x] `BaseAgent` + 3 concrete agents
-- [x] `OrchestratorService` state machine
-- [x] `MatchingService` for role/skill matching
-- [x] `AgentOrchestrator.tsx` and `RoleMatcher.tsx` UI components
-- [x] `hooks/useOrchestrator` and `hooks/useRoleMatch`
-- [ ] Wire real OpenAI/LLM API calls into `BaseAgent.execute()`
+### Phase 3 — AI orchestration (LLM) 🔄
+**Done (client-side simulation):**
+- [x] `BaseAgent` + three concrete agents; `OrchestratorService`; `MatchingService`
+- [x] `AgentOrchestrator`, `RoleMatcher`, `useOrchestrator`, `useRoleMatch`
 
-### Phase 4 — Data Layer
-- [ ] Initialize Supabase tables (`profiles`, `resumes`, `jobs`, `interview_sessions`)
-- [ ] Resume upload and Job tracking CRUD
-- [ ] Connect orchestration layer to real Supabase data
-- [ ] Automated job board monitoring (Edge Functions)
+**Remaining:**
+- [ ] **Secrets**: Do **not** ship production API keys in the browser — add a **Supabase Edge Function** (or small backend) that holds the OpenAI (or Azure OpenAI) key and validates the user’s JWT before calling the model.
+- [ ] **Contract**: Define request/response DTOs for the Edge Function; map results into existing `AgentResult` / `AgentTask` types.
+- [ ] **Implement** `BaseAgent.execute()` (or a parallel `LlmClient`) to call that endpoint instead of returning simulated strings.
+- [ ] **Resilience**: Timeouts, user-visible errors, optional retry/backoff for transient LLM failures.
+- [ ] **Cost & safety**: Rate limiting per user (Edge layer), logging/metrics, and validation/sanitization of model output before rendering (see guardrails above).
+
+### Phase 4 — Data layer (Supabase) 🔄
+**Project & schema**
+- [x] Versioned SQL under `supabase/migrations/` (initial migration: enums, tables, RLS, `handle_new_user` trigger) — see `supabase/README.md`
+- [ ] Run migration against your project (`supabase db push` or SQL Editor)
+- [x] Tables: `profiles`, `resumes`, `jobs`, `interview_sessions` (columns in **Database Schema** section above)
+- [x] **RLS** on all tables; policies use `(select auth.uid())` for caching; indexes on `user_id` / `job_id` where needed
+- [x] `profiles` row on sign-up (`on_auth_user_created` trigger) + **upsert** from app if row missing
+
+**Client integration**
+- [x] **`@tanstack/react-query`** + `QueryClientProvider`; `useProfile` + `profileService` for Settings
+- [ ] Regenerate **`supabase` TypeScript types** after migrations; use generated types in services
+- [ ] **Resume**: Storage bucket + policies for uploads; persist parsed `content` jsonb; replace `useResume` mock with real queries
+- [ ] **Jobs**: CRUD + status transitions; replace mock `JobTracker` data
+- [ ] **Interview sessions**: Save `chat_history` / `ai_feedback` per job
+- [ ] **Orchestration inputs**: Read resume + job context from DB when running missions (replace hard-coded demo content)
+
+**Optional / later**
+- [ ] **Automated job monitoring** (scraping or APIs) via **Edge Functions** + cron — high effort; compliance and ToS sensitive
+
+### Phase 5 — UX, performance, reliability 🔜
+- [ ] Consistent loading/empty/error states across feature pages
+- [ ] Error boundary at layout or route level; friendly fallback UI
+- [ ] **Responsive** sidebar/nav (drawer or collapse on small viewports)
+- [ ] Further **code-splitting** or prefetch for heavy routes if bundle grows
+- [ ] Accessibility pass (focus order, labels, contrast) on auth + main flows
+
+### Phase 6 — Quality & operations 🔜
+- [ ] **Vitest** (or chosen runner) + `npm test` in CI
+- [ ] Critical-path tests: auth guard behavior, one service with mocked Supabase
+- [ ] **Production deploy** (e.g. static host + env vars): `VITE_*` documented; Supabase prod project
+- [ ] Optional E2E (Playwright) for login + one protected route
 
 ---
 

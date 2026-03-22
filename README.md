@@ -42,7 +42,7 @@ Most tools offer static templates. NextRole offers a **Dynamic Mission Flow** wh
 | **Frontend** | React (Vite), TypeScript |
 | **Styling** | Tailwind CSS |
 | **UI Components** | shadcn/ui, Magic UI |
-| **State / Data** | TanStack Query (planned), AuthContext |
+| **State / Data** | TanStack Query, AuthContext |
 | **Backend / Auth** | Supabase |
 | **AI Layer** | OpenAI (Mission-driven orchestration) |
 
@@ -83,6 +83,9 @@ Most tools offer static templates. NextRole offers a **Dynamic Mission Flow** wh
    npm run dev
    ```
 
+5. **Apply database migrations** (Settings page loads `profiles` from Supabase):
+   - See **`supabase/README.md`** — run the SQL in the Supabase SQL Editor, or use `supabase db push` with the CLI.
+
 ---
 
 ## 🗺️ Roadmap
@@ -92,7 +95,7 @@ See `docs/ARCHITECTURE.md` for the full phased plan. In short:
 - [x] **Phase 1**: Authentication & core layout
 - [x] **Phase 2**: Page scaffolding (resume, jobs, interview, settings)
 - [ ] **Phase 3**: Wire real LLM calls into the orchestration layer
-- [ ] **Phase 4**: Supabase data layer (profiles, resumes, jobs, interviews)
+- [ ] **Phase 4**: Supabase data layer (migrations + TanStack Query in progress; resumes/jobs CRUD next)
 - [ ] **Phase 5**: Advanced interview / media features (as needed)
 
 ---

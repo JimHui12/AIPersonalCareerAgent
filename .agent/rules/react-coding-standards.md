@@ -2,12 +2,10 @@
 trigger: always_on
 ---
 
-# React Coding Standards
-**Applies to:** `src/**/*.tsx`, `src/**/*.ts`
-**Activation:** Always On
+# React coding standards
 
-- Use **TypeScript** for all components; strictly avoid `any`.
-- Prefer **Functional Components** with hooks over Class components.
-- Use **Tailwind CSS** for all styling; do not create separate `.css` files.
-- All data fetching must use **TanStack Query** hooks.
-- Before finishing any task, run `npm run lint` and fix all errors.
+**Activation:** Always on — same scope as `code-rules.md`.
+
+Canonical detail lives in **`.agent/rules/code-rules.md`** (TypeScript, React, Tailwind, data fetching, docs, lint).
+
+**Summary:** function components + hooks; Tailwind; shared types in `src/types/`; run `npm run lint` before wrapping up.

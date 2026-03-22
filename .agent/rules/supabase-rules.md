@@ -16,8 +16,8 @@ trigger: always_on
 - **Avoid Heavy Joins**: Keep RLS policies simple. If complex logic is needed, use a `security definer` function in a separate schema.
 
 ## 🛠️ Development Workflow
-- **Migrations Only**: Do not suggest manual Dashboard changes. All schema updates must be written as SQL migrations in `supabase/migrations/`.
-- **Type Safety**: After changing the schema, remind the user to run `supabase gen types typescript` to keep the React frontend in sync.
+- **Migrations only**: Prefer schema changes as SQL migrations under `supabase/migrations/` once the Supabase CLI project exists (`supabase init`). Until then, document intended schema in `docs/ARCHITECTURE.md` and apply via Dashboard or first migration when CLI is set up. Avoid relying on undocumented one-off Dashboard edits as the source of truth.
+- **Type safety**: After schema changes, regenerate types (`supabase gen types typescript`, or your project’s equivalent) so the frontend stays aligned.
 - **Edge Functions**: Use the `Deno.serve` pattern for Edge Functions. Prefer `Hono` or `Express` for functions with multiple routes.
 
 ## 📝 Naming Conventions
